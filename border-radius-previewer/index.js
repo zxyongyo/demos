@@ -19,7 +19,7 @@ for (const key of Object.keys(borderRadiusMap)) {
     borderRadiusMap[key].push(value)
   }
 }
-console.log(borderRadiusMap)
+// console.log(borderRadiusMap)
 
 const setBorderRadius = () => {
   borderRadius = borderRadiusMap["border-top-left-radius"][0] + ' '
@@ -41,12 +41,11 @@ setBorderRadius()
 
 /** size setting */
 const box = document.getElementById('box')
-const boxRect = box.getBoundingClientRect()
 const widthIpt = document.getElementById('width')
 const heightIpt = document.getElementById('height')
 
-widthIpt.value = boxRect.width.toFixed(0)
-heightIpt.value = boxRect.height.toFixed(0)
+widthIpt.value = box.offsetWidth.toFixed(0)
+heightIpt.value = box.offsetHeight.toFixed(0)
 
 widthIpt.addEventListener('input', e => {
   box.style.width = e.target.value + 'px'
@@ -59,6 +58,8 @@ heightIpt.addEventListener('input', e => {
 const handleReset = () => {
   box.style.width = '50vmin'
   box.style.height = '50vmin'
+  widthIpt.value = box.offsetWidth.toFixed(0)
+  heightIpt.value = box.offsetHeight.toFixed(0)
 }
 
 
@@ -87,29 +88,44 @@ leftHandle.addEventListener('mousedown', mousedown)
 
 document.addEventListener('mousemove', e => {
   if (!movingEl) { return }
-  // console.log('mousemove', e)
-  // console.log(boxRect)
+  e.preventDefault()
+
   switch (movingEl) {
     case topHandle: 
     case bottomHandle: 
-      const moveLeft = minmax((e.clientX - box.offsetLeft) / boxRect.width * 100, 0, 100)
+      const moveLeft = minmax((e.clientX - box.offsetLeft) / box.offsetWidth * 100, 0, 100)
       const left = moveLeft.toFixed(0) + '%'
       // console.log(left)
       movingEl.style.left = left
 
-      // borderRadiusMap["border-top-left-radius"][0] = left
-      // borderRadiusMap["border-top-right-radius"][0] = (100 - moveLeft).toFixed(0) + '%'
+      if (movingEl == topHandle) {
+        borderRadiusMap["border-top-left-radius"][0] = left
+        borderRadiusMap["border-top-right-radius"][0] = (100 - moveLeft).toFixed(0) + '%'
+      } else {
+        borderRadiusMap["border-bottom-right-radius"][0] = (100 - moveLeft).toFixed(0) + '%'
+        borderRadiusMap["border-bottom-left-radius"][0] = left
+      }
 
-      // setBorderRadius()
       break
     case rightHandle: 
     case leftHandle: 
-      const moveTop = ((e.clientY - box.offsetTop) / boxRect.width * 100).toFixed(0)
-      const top = Math.max(Math.min(moveTop, 100), 0) + '%'
+      const moveTop = minmax((e.clientY - box.offsetTop) / box.offsetHeight * 100, 0, 100)
+      const top = moveTop.toFixed(0) + '%'
       // console.log(top)
       movingEl.style.top = top
+
+      if (movingEl == rightHandle) {
+        borderRadiusMap["border-top-right-radius"][1] = top
+        borderRadiusMap["border-bottom-right-radius"][1] = (100 - moveTop).toFixed(0) + '%'
+      } else {
+        borderRadiusMap["border-top-left-radius"][1] = top
+        borderRadiusMap["border-bottom-left-radius"][1] = (100 - moveTop).toFixed(0) + '%'
+      }
+
       break
   }
+
+  setBorderRadius()
 })
 
 document.addEventListener('mouseup', e => {
@@ -122,4 +138,30 @@ document.addEventListener('mouseup', e => {
 
 const minmax = (n, min, max) => {
   return Math.max(Math.min(n, max), min)
+}
+
+
+/** copy */
+const copyBtn = document.getElementById('copy')
+
+copyBtn.addEventListener('click', async () => {
+  await navigator.clipboard.writeText(outputIpt.innerText)
+  showMessageBox()
+})
+
+const messageBox = document.getElementById('message-box')
+const message = document.getElementById('message')
+let timerId = 0
+
+const showMessageBox = (text = 'Copied success! 👌', duration = 2500) => {
+  if (timerId) { clearTimeout(timerId) }
+  
+  message.innerText = text
+  message.style.opacity = 1
+  message.style.transform = 'translate(-50%, 0)'
+
+  timerId = setTimeout(() => {
+    message.style.opacity = 0
+    message.style.transform = 'translate(-50%, calc(-3rem - 100%))'
+  }, duration)
 }

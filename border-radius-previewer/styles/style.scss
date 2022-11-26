@@ -8,7 +8,7 @@ body {
   min-height: 100vh;
   font-family: 'M PLUS Rounded 1c', sans-serif;
   overflow: hidden;
-  user-select: none;
+  // user-select: none;
 }
 
 .container {
@@ -66,11 +66,12 @@ body {
       border-top: 1px solid #fffc;
       a {
         padding: 0 20px;
+        opacity: 0.9;
         color: #f09;
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         text-decoration: none;
-        &:active {
-          opacity: 0.9;
+        &:hover {
+          opacity: 1;
         }
         img {
           display: inline-block;
@@ -91,55 +92,129 @@ body {
     height: 50vmin;
     border: 2px dashed rgba(255, 255, 255, 0.4);
     .shape {
+      position: relative;
       width: 100%;
       height: 100%;
       background: linear-gradient(45deg, #3023ae 0%, #ff0099 100%);
-      border-radius: 0% 100% 0% 100% / 100% 0% 100% 0% ;
+      border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+      &.full-control {
+        border-radius: 10% 10% 10% 10% / 10% 10% 10% 10%;
+        background: linear-gradient(
+            -225deg,
+            #ffffff 0%,
+            rgba(255, 255, 255, 0) 40%,
+            rgba(0, 255, 255, 0) 60%,
+            #0ff 100%
+          ),
+          linear-gradient(45deg, #3023ae 0%, #ff0099 100%);
+      }
     }
-    .handle{
+    .handle {
       display: block;
       position: absolute;
       width: 2.5rem;
       height: 2.5rem;
       cursor: pointer;
-      &#top{
+
+      &#top {
         top: 0;
         left: 0;
-        transform: translate(calc(-50% + 8px), -50%);
+        transform: translate(-50%, calc(-50% - 10px));
       }
-      &#right{
+      &#right {
         top: 0;
         left: 100%;
-        transform: translate(-50%, calc(-50% + 8px));
+        transform: translate(calc(-50% + 10px), -50%);
       }
-      &#bottom{
+      &#bottom {
         top: 100%;
         left: 100%;
-        transform: translate(calc(-50% - 8px), -50%);
+        transform: translate(-50%, calc(-50% + 10px));
       }
-      &#left{
+      &#left {
         top: 100%;
         left: 0;
-        transform: translate(-50%, calc(-50% - 8px));
+        transform: translate(calc(-50% - 10px), -50%);
       }
-      &::after{
-        content: "";
+
+      &#topX {
+        top: 0;
+        left: 0;
+        transform: translate(-50%, calc(-50% - 10px));
+      }
+      &#topY {
+        top: 0;
+        left: 0;
+        transform: translate(calc(-50% - 10px), -50%);
+      }
+      &#rightX {
+        top: 0;
+        left: 100%;
+        transform: translate(-50%, calc(-50% - 10px));
+      }
+      &#rightY {
+        top: 0;
+        left: 100%;
+        transform: translate(calc(-50% + 10px), -50%);
+      }
+      &#bottomX {
+        top: 100%;
+        left: 100%;
+        transform: translate(-50%, calc(-50% + 10px));
+      }
+      &#bottomY {
+        top: 100%;
+        left: 100%;
+        transform: translate(calc(-50% + 10px), -50%);
+      }
+      &#leftX {
+        top: 100%;
+        left: 0;
+        transform: translate(-50%, calc(-50% + 10px));
+      }
+      &#leftY {
+        top: 100%;
+        left: 0;
+        transform: translate(calc(-50% - 10px), -50%);
+      }
+
+      &::after {
+        content: '';
         display: block;
         position: absolute;
         top: 0;
         right: 0;
         bottom: 0;
         left: 0;
-        transform: scale(.4);
-        background: white;
+        transform: scale(0.4);
         border: 2px solid #002;
         border-radius: 50%;
+        background: white;
       }
-      &.active,
-      &:hover{
-        &::after{
-          background: #ff0099;
-          box-shadow: 0 0 0 0.75rem white;
+      &.right::after {
+        background: #ff0099;
+      }
+      &.bottom::after {
+        background: #0ff;
+      }
+      &.left::after {
+        background: #3023ae;
+      }
+      &:not(.v8){
+        &.active,
+        &:hover{
+          &::after {
+            background: #ff0099;
+            box-shadow: 0 0 0 0.75rem white;
+          }
+        }
+      }
+      &.v8{
+        &.active,
+        &:hover{
+          &::after {
+            box-shadow: 0 0 0 0.75rem white;
+          }
         }
       }
     }
@@ -161,7 +236,7 @@ body {
         display: flex;
         .value {
           flex: 1;
-          padding: .65em 1em;
+          padding: 0.65em 1em;
           background: #ccc;
           border-radius: 2px 0 0 2px;
           color: black;
@@ -171,7 +246,7 @@ body {
         button {
           display: block;
           padding: 0.5rem 1rem;
-          background: #FF0099;
+          background: #ff0099;
           border: 0;
           border-radius: 0 2px 2px 0;
           color: #fffc;
@@ -179,20 +254,20 @@ body {
           font-weight: bold;
           appearance: none;
           cursor: pointer;
-          transition: background .3s;
-          &:hover{
+          transition: background 0.3s;
+          &:hover {
             background: #3023ae;
           }
         }
       }
     }
-    .size{
+    .size {
       display: flex;
       align-items: baseline;
       margin: 0 auto;
       margin-top: 20px;
       max-width: 37rem;
-      .label{
+      .label {
         margin-right: 15px;
         font-size: 1.2rem;
       }
@@ -201,15 +276,15 @@ body {
         display: flex;
         align-items: baseline;
         justify-content: flex-end;
-        .input-group{
+        .input-group {
           margin-right: 20px;
-          label{
+          label {
             margin-right: 5px;
             font-size: 1.2rem;
             line-height: 1;
           }
-          input{
-            padding: .5em .65em;
+          input {
+            padding: 0.5em 0.65em;
             width: 5rem;
             border: 0;
             border-radius: 2px;
@@ -220,7 +295,7 @@ body {
         button {
           display: block;
           padding: 0.5rem 1rem;
-          background: #FF0099;
+          background: #ff0099;
           border: 0;
           border-radius: 2px;
           color: #fffc;
@@ -228,12 +303,33 @@ body {
           font-weight: bold;
           appearance: none;
           cursor: pointer;
-          transition: background .3s;
-          &:hover{
+          transition: background 0.3s;
+          &:hover {
             background: #3023ae;
           }
         }
       }
+    }
+  }
+
+  .message-box {
+    position: fixed;
+    top: 0;
+    z-index: 99;
+    width: 100%;
+    > div {
+      position: absolute;
+      top: 3rem;
+      left: 50%;
+      transform: translate(-50%, calc(-3rem - 100%));
+      padding: 0.6em 1.6em;
+      background: #e1f3d8;
+      border-radius: 0.3em;
+      opacity: 0;
+      transition: all 0.5s;
+      color: #67c23a;
+      font-size: 1.3rem;
+      font-family: Ubuntu Mono, monospace;
     }
   }
 }
