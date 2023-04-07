@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add cart animation</title>
+    <style>
+      body {
+        padding: 0;
+        margin: 0;
+        height: 100vh;
+        box-sizing: border-box;
+        user-select: none;
+      }
+      .container {
+        display: grid;
+        place-content: center;
+        height: 100%;
+      }
+      .wrapper {
+        display: flex;
+        flex-direction: column;
+        width: 390px;
+        height: 884px;
+        border: 1px solid #eee;
+      }
+      .wrapper .icon {
+        display: grid;
+        place-content: center;
+        margin: 20px;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: #409eff;
+        color: white;
+        font-size: 1.5em;
+        line-height: 1;
+        cursor: pointer;
+      }
+      .wrapper .icon.right {
+        align-self: end;
+      }
+      .wrapper .cart {
+        margin-top: auto;
+        padding: 30px 20px;
+        align-self: center;
+      }
+      @keyframes fly {
+        15% {
+          transform: translateY(-70px) scale(0.7);
+        }
+        100% {
+          transform: translateY(var(--y)) scale(0.5);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="wrapper">
+        <div class="icon left">+</div>
+        <div class="icon right">+</div>
+        <div class="icon left">+</div>
+        <div class="icon right">+</div>
+        <div class="icon left">+</div>
+        <div class="icon right">+</div>
+        <div class="icon left">+</div>
+        <div class="icon right">+</div>
+        <div class="icon left">+</div>
+        <div class="icon right">+</div>
+        <div class="cart">🚗购物车</div>
+      </div>
+    </div>
+
+    <script>
+      const wrapper = document.querySelector('.wrapper')
+      const icons = document.querySelectorAll('.icon')
+      const cart = document.querySelector('.cart')
+
+      icons.forEach(item => {
+        item.addEventListener('click', e => {
+          const targetRect = e.target.getBoundingClientRect()
+          const cartRect = cart.getBoundingClientRect()
+          const cloneTarget = e.target.cloneNode(true)
+          const y = cartRect.top - targetRect.top + 20
+          const duration = y > wrapper.offsetHeight / 2 ? '.7s' : '.5s'
+          console.log(cartRect.top, targetRect.top, duration)
+
+          cloneTarget.style.margin = '0'
+          cloneTarget.style.position = 'absolute'
+          cloneTarget.style.zIndex = '-1'
+          cloneTarget.style.top = targetRect.top + 'px'
+          cloneTarget.style.left = targetRect.left + 'px'
+          cloneTarget.style.animation = `fly ${duration} alternate ease-in`
+          cloneTarget.style.transition = `all ${duration}`
+          cloneTarget.style.setProperty('--y', y + 'px')
+
+          cloneTarget.addEventListener('animationend', () => {
+            cloneTarget.remove()
+          })
+
+          wrapper.appendChild(cloneTarget)
+          setTimeout(() => {
+            cloneTarget.style.left = cartRect.left + 20 + 'px'
+          }, 10)
+        })
+      })
+    </script>
+  </body>
+</html>
