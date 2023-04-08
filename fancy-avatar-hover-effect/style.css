@@ -1,0 +1,46 @@
+body {
+  margin: 0;
+  display: grid;
+  place-content: center;
+  min-height: 80vh;
+  background: #e0e4cc;
+}
+
+img {
+  --s: 280px; /* image size */
+  --b: 5px; /* border width */
+  --c: #c02942; /* border color */
+  --f: 1; /* initial scale */
+  --_g: center / calc(100% / var(--f)) 100% no-repeat content-box;
+  /* 
+    (缩放后的size 减 缩放前的size) 除以 2 除以 缩放倍数 乘 -1(转为负值) 减 边框宽度
+    calc((var(--f) * var(--s) - var(--s)) / 2 / var(--f) * -1 - var(--b))
+  */
+  --_o: calc((1 / var(--f) - 1) * var(--s) / 2 - var(--b));
+
+  padding-top: calc(var(--s) / 5);
+  width: var(--s);
+  aspect-ratio: 1;
+  background: radial-gradient(
+      circle closest-side,
+      #ecd078 calc(99% - var(--b)),
+      var(--c) calc(100% - var(--b)) 99%,
+      transparent
+    )
+    var(--_g);
+  --m: linear-gradient(#000 0 0) no-repeat center calc(1px - var(--_o)) /
+      calc(100% / var(--f) - 2 * var(--b) - 2px) 50%,
+    radial-gradient(circle closest-side, #000 99%, transparent) var(--_g);
+  -webkit-mask: var(--m);
+  mask: var(--m);
+  border-radius: 0 0 999px 999px;
+  outline: var(--b) solid var(--c);
+  outline-offset: var(--_o);
+  cursor: pointer;
+  transform: scale(var(--f));
+  transition: 0.5s;
+}
+
+img:hover {
+  --f: 1.35; /* hover scale */
+}
