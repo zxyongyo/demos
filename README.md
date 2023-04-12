@@ -16,8 +16,10 @@
 
 - [Custom Range Slider](https://zxyongyo.github.io/demos/custom-range-slider)
 
-- [Border Radius Previewer](https://zxyongyo.github.io/demos/border-radius-previewer)
+- [Border Radius Previewer](https://zxyongyo.github.io/border-radius-previewer)
 
 - [Animated Grid](https://zxyongyo.github.io/demos/animated-grid)
 
 - [Add Cart Animation](https://zxyongyo.github.io/demos/add-cart-animation)
+
+- [Fancy Avatar Hover Effect](https://zxyongyo.github.io/demos/fancy-avatar-hover-effect)
